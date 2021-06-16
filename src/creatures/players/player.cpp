@@ -2426,11 +2426,15 @@ void Player::death(Creature* lastHitCreature)
 		while (it != end) {
 			Condition* condition = *it;
 			if (condition->isPersistent()) {
-				it = conditions.erase(it);
-
-				condition->endCondition(this);
-				onEndCondition(condition->getType());
-				delete condition;
+				if (condition->getType() != CONDITION_SPELLCOOLDOWN) {
+					it = conditions.erase(it); {
+						condition->endCondition(this);
+					}
+					onEndCondition(condition->getType());
+					delete condition;
+					}	else {
+						++it;
+					}
 			} else {
 				++it;
 			}
@@ -2442,11 +2446,15 @@ void Player::death(Creature* lastHitCreature)
 		while (it != end) {
 			Condition* condition = *it;
 			if (condition->isPersistent()) {
-				it = conditions.erase(it);
-
-				condition->endCondition(this);
-				onEndCondition(condition->getType());
-				delete condition;
+				if (condition->getType() != CONDITION_SPELLCOOLDOWN) {
+					it = conditions.erase(it); {
+						condition->endCondition(this);
+					}
+					onEndCondition(condition->getType());
+					delete condition;
+				} else {
+					++it;
+				}
 			} else {
 				++it;
 			}
