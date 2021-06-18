@@ -24,6 +24,7 @@
 #include "lua/scripts/luascript.h"
 #include "creatures/interactions/chat.h"
 #include "creatures/players/player.h"
+#include "lua/creature/events.h"
 #include "game/game.h"
 #include "server/network/protocol/protocolstatus.h"
 #include "creatures/combat/spells.h"
@@ -46,6 +47,7 @@
 #include "utils/enums.h"
 
 extern Chat* g_chat;
+extern Events* g_events;
 extern Game g_game;
 extern Monsters g_monsters;
 extern ConfigManager g_config;
@@ -5317,6 +5319,7 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	bool extended = getBoolean(L, 3, false);
 	bool force = getBoolean(L, 4, false);
 	if (g_game.placeCreature(monster, position, extended, force)) {
+		g_events->eventMonsterOnSpawn(monster, position);
 		pushUserdata<Monster>(L, monster);
 		setMetatable(L, -1, "Monster");
 	} else {
